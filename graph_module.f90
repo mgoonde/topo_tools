@@ -150,11 +150,9 @@ contains
     real, dimension(ntyp,ntyp), intent(in) :: color_cut
     integer,                    intent(out) :: hash
 
-    integer, allocatable :: connect(:,:), connect_loc(:,:)
-    integer, allocatable :: res(:), typ_loc(:), lab(:), color(:)
-    integer :: idx_center, nat_loc, i, k, h1, h2, h3
-    real, dimension(3) :: r_center
-    real, allocatable :: coords_loc(:,:)
+    integer, allocatable :: connect(:,:)
+    integer, allocatable :: lab(:), color(:)
+    integer :: i, h1, h2, h3
 
 !    write(*,*) 'input conf:'
 !    write(*,*) nat
@@ -164,7 +162,6 @@ contains
 !    end do
 
 
-    !print*," *** enter in prepare_hash"
 
     !! allocate and generate connectivity
     allocate( connect(1:nat,1:nat))
@@ -174,63 +171,11 @@ contains
 !       write(*,'(64i2)') connect(i,:)
 !    end do
 
-    allocate( res(1:nat))
-    res(:) = 1
-    res(1) = 0
-
-    !! identify connected graph
-!    idx_center = 1
-!    call identify_cluster( nat, connect, idx_center, res )
-    !! reallocate to local cluster
-!    write(*,*) 'connected graph'
-
-    !! take second connected
-!    res(:) = matmul(connect,connect(1,:)) + connect(1,:)
-!    do i = 1, nat
-!       if( res(i) .ne. 0) res(i) = 1
-!    end do
-!    res(1) = 0
-!    write(*,'(64i2)') res(:)
-
-    nat_loc = sum( res )+1
-!    write(*,*) 'local nat',nat_loc
-    allocate( typ_loc(1:nat_loc) )
-    allocate( coords_loc(1:3,1:nat_loc) )
-    !! include atoms in connected graph, put central on first index
-    idx_center = 1
-    r_center = coords( :,idx_center)
-    k = 2
-    typ_loc(1) = typ( idx_center )
-    coords_loc(:,1) = coords(:, idx_center) - r_center(:)
-    do i = 1, nat
-       if ( i .eq. idx_center ) cycle
-       typ_loc(k) = typ(i)
-       coords_loc(:,k) = coords(:,i) - r_center(:)
-       k = k + res(i)
-       if( k .gt. nat_loc) exit
-    end do
-!    write(*,*) 'cluster conf:'
-!    write(*,*) nat_loc
-!    do i = 1, nat_loc
-!       write(*,*) typ_loc(i), coords_loc(i,:)
-!    end do
-
-    !! generate new connect
-    allocate( connect_loc(1:nat_loc,1:nat_loc) )
-    call generate_connect( nat_loc, coords_loc, typ_loc, ntyp, color_cut, connect_loc )
-
-!    write(*,*) 'connect from prepare_hash'
-!    write(*,'(64i2)') sum(connect_loc(:,:))
-!    do i = 1, nat_loc
-!       write(*,'(50i2)') connect_loc(i,:)
-!    end do
-
-
-    !! hash the new connect
-    allocate( lab(1:nat_loc) )
-    allocate( color(1:nat_loc) )
-    call prepare_nauty( nat_loc, typ_loc, lab, color)
-    call c_ffnauty( nat_loc, connect_loc, lab, color, typ_loc, h1, h2, h3 )
+    !! hash the connect
+    allocate( lab(1:nat) )
+    allocate( color(1:nat) )
+    call prepare_nauty( nat, typ, lab, color)
+    call c_ffnauty( nat, connect, lab, color, typ, h1, h2, h3 )
 
     hash = modulo (modulo (h1,104729)+ modulo(h2, 15485863)+ modulo(h3, 882377) - 1, 1299709)+1
 
@@ -241,9 +186,8 @@ contains
 
 
 
-    deallocate( res )
     deallocate( lab, color )
-    deallocate( typ_loc, coords_loc, connect_loc )
+    deallocate( connect )
 
   end subroutine prepare_hash
 

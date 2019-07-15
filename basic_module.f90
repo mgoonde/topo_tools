@@ -26,6 +26,7 @@ contains
 
 
   function lower(s1)  result (s2)
+    !! put character string into lower case
     character(*)       :: s1
     character(len(s1)) :: s2
     character          :: ch
