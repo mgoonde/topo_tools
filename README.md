@@ -27,14 +27,14 @@ Programs currently included:
   from input coordinates generate connectivity, canonical ordering, and hash.
   Run:
 
-    ./coords_hash.x < input
+     ./coords_hash.x < input
 
 - site_hash.x:
   from input configuration, go through every site, generate local configuration
   with a spherical cutoff Rcut, generate connectivity and hash of this small local
   configuration. Run:
 
-    ./site_hash.x < input
+     ./site_hash.x < input
 
 
 
