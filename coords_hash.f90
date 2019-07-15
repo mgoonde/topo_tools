@@ -82,6 +82,9 @@ program coords_hash
 
   ! prepare arrays for nauty
   call prepare_nauty( nat, typ, lab, color )
+  write(*,*) 'nauty-format color array:'
+  write(*,'(*(i3))') color(:)
+  write(*,*)
 
   ! call nauty
   call c_ffnauty( nat, connect, lab, color, typ, h1, h2, h3 )

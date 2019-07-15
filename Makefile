@@ -8,7 +8,7 @@ NAUT = ./nauty26r11/
 
 
 
-default: coords_hash.x
+all: coords_hash.x site_hash.x
 
 
 
@@ -30,8 +30,10 @@ f90nautyinterf.o: f90nautyinterf.f90
 
 
 coords_hash.x: f90nautyinterf.o basic_module.o graph_module.o coords_hash.o ffnauty.o
-	$(F90) $(FFLAGS) -o coords_hash.x $^ $(NAUT)/nauty.a
+	$(F90) $(FFLAGS) -o $@ $^ $(NAUT)/nauty.a
 
+site_hash.x: f90nautyinterf.o basic_module.o graph_module.o site_hash.o ffnauty.o
+	$(F90) $(FFLAGS) -o $@ $^ $(NAUT)/nauty.a
 
 
 clean:
