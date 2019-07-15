@@ -19,9 +19,11 @@ program coords_hash
 
 
 
+  !! open the cutoff file
+  open( unit = 444, file= 'color_cutoff.dat', status = 'old')
 
   !! how many types of atoms are there
-  read(*,*) ntyp
+  read(444,*) ntyp
 
   allocate( color_cut( 1:ntyp, 1:ntyp) )
 
@@ -29,7 +31,7 @@ program coords_hash
 
   !! read the color cutoffs for each combination of types
   do i = 1, ntyp*(ntyp+1)/2
-     read(*,*) j, k, dist
+     read(444,*) j, k, dist
      color_cut(j,k) = dist
      color_cut(k,j) = dist
   end do
