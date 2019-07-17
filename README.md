@@ -27,15 +27,20 @@ Programs currently included:
   from input coordinates generate connectivity, canonical ordering, and hash.
   Run:
 
-     ./coords_hash.x < input
+     ./coords_hash.x < input_coords
 
 - site_hash.x:
   from input configuration, go through every site, generate local configuration
   with a spherical cutoff Rcut, generate connectivity and hash of this small local
   configuration. Run:
 
-     ./site_hash.x < input
+     ./site_hash.x < input_si_tetra
 
+- distance_tool.x:
+  from two configurations in input, calculate the smallest distance from configuration_1
+  to configuration_2, permutations included. Run:
+
+     ./distance_tool.x < input_distance
 
 
 Configurable files: 

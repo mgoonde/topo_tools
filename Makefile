@@ -51,20 +51,20 @@ help:
 
 
 
+# rules for object files
+
 $(OBJ)/ffnauty.o: ffnauty.c
 	$(CC) -c $< -I./$(NAUT) -o $@
 
 $(OBJ)/%.o: %.f90
 	$(F90) $(MOD) $(FFLAGS) -c $< -o $@
 
-$(OBJ)/f90nautyinterf.o: f90nautyinterf.f90
-	$(F90) $(MOD) $(FFLAGS) -c $< -o $@
 
 
 
 
 
-
+# rules for executables
 
 $(CHX): \
               $(OBJ)/f90nautyinterf.o \
